@@ -1,0 +1,7 @@
+angular/src/app/triangular/components/menu/menu-item-directive.js
+/.classpath
+/.project
+/.settings/
+/target/
+/bower_components/
+.vscode
