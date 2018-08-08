@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
 import InputCustom from './components/InputCustom';
+import PubSub from 'pubsub-js';
+import ErrorTreatment from './utils/ErrorTreatment';
 
 class AutorForm extends Component {
     
@@ -29,15 +31,19 @@ class AutorForm extends Component {
               senha: this.state.senha
             }
           ),
-          success: function(response) {
-            this.props.callbackUpdate(response);
+          success: function(response) { 
+            PubSub.publish('update-list-autores', response);
             this.cleanFields();
           }.bind(this), 
           error: function(err) {
-            console.log(err);
-          }
+            if (err.status === 400) {
+                new ErrorTreatment().publish(err.responseJSON);
+            }
+          },
+          beforeSend: function(){
+            PubSub.publish('clean-errors-form-autores', {});
+          }      
         });
-    
     }
 
     setNome(evt) {
@@ -62,13 +68,13 @@ class AutorForm extends Component {
                 <form className="pure-form pure-form-aligned" method="POST" onSubmit={this.sendForm}>
                 
                     <InputCustom id={this.state.nome} label="Nome" name="nome" type="text" 
-                        value={this.props.nome} onChange={this.setNome} />
+                        value={this.state.nome} onChange={this.setNome} />
 
                     <InputCustom id={this.state.email} label="E-mail" name="email" type="email" 
-                        value={this.props.email} onChange={this.setEmail} />
+                        value={this.state.email} onChange={this.setEmail} />
 
                     <InputCustom id={this.state.senha} label="Senha" name="senha" type="password" 
-                        value={this.props.senha} onChange={this.setSenha} />
+                        value={this.state.senha} onChange={this.setSenha} />
 
                     <div className="pure-control-group">                                  
                         <label></label> 
@@ -86,7 +92,21 @@ class AutorTable extends Component {
         super();
         this.state = {autores: []};
     }
- 
+
+    componentDidMount() {
+        $.ajax({
+            url: 'http://localhost:8080/api/autores',
+            dataType: 'json',
+            success: function(response) {
+                this.setState({autores: response});
+            }.bind(this)
+        });
+
+        PubSub.subscribe('update-list-autores', function(topic, newList) {
+            this.setState({autores: newList});
+        }.bind(this));
+    }
+
     render() {
         return (
             <div>            
@@ -99,7 +119,7 @@ class AutorTable extends Component {
                     </thead>
                     <tbody>
                         {
-                            this.props.autores.map(function(autor) {
+                            this.state.autores.map(function(autor) {
                                 return (
                                 <tr key={autor.id}>
                                     <td>{autor.nome}</td>                
@@ -120,28 +140,13 @@ export default class AutorBox extends Component {
     constructor() {
         super();
         this.state = {autores: []};
-        this.updateList = this.updateList.bind(this);
-    }
-
-    componentDidMount() {
-        $.ajax({
-            url: 'http://localhost:8080/api/autores',
-            dataType: 'json',
-            success: function(response) {
-                this.setState({autores: response});
-            }.bind(this)
-        });
-    }
-
-    updateList(newList) {
-        this.setState({autores: newList});
     }
 
     render() {
         return (
             <div>
-                <AutorForm callbackUpdate={this.updateList} />
-                <AutorTable autores={this.state.autores} />
+                <AutorForm />
+                <AutorTable />
             </div>
         );
     }
