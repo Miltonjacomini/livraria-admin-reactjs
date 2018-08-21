@@ -145,8 +145,13 @@ export default class AutorBox extends Component {
     render() {
         return (
             <div>
-                <AutorForm />
-                <AutorTable />
+                <div className="header">
+                    <h1>Cadastro de autores</h1>
+                </div>
+                <div>
+                    <AutorForm />
+                    <AutorTable />
+                </div>
             </div>
         );
     }
