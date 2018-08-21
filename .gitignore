@@ -4,5 +4,5 @@ angular/src/app/triangular/components/menu/menu-item-directive.js
 /.settings/
 /target/
 /bower_components/
-/node_modules/.cache
+/node_modules/*
 .vscode
