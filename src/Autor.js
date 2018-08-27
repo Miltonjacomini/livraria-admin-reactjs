@@ -4,6 +4,28 @@ import InputCustom from './components/InputCustom';
 import PubSub from 'pubsub-js';
 import ErrorTreatment from './utils/ErrorTreatment';
 
+export default class AutorBox extends Component {
+
+    constructor() {
+        super();
+        this.state = { autores: [] };
+    }
+
+    render() {
+        return (
+            <div>
+                <div className="header">
+                    <h1>Cadastro de autores</h1>
+                </div>
+                <div className="content mg-top-10">
+                    <AutorForm />
+                    <AutorTable />
+                </div>
+            </div>
+        );
+    }
+}
+
 class AutorForm extends Component {
     
     constructor() {
@@ -131,28 +153,6 @@ class AutorTable extends Component {
                     </tbody>
                 </table> 
             </div>  
-        );
-    }
-}
-
-export default class AutorBox extends Component {
-
-    constructor() {
-        super();
-        this.state = {autores: []};
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="header">
-                    <h1>Cadastro de autores</h1>
-                </div>
-                <div>
-                    <AutorForm />
-                    <AutorTable />
-                </div>
-            </div>
         );
     }
 }
