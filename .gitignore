@@ -6,3 +6,4 @@ angular/src/app/triangular/components/menu/menu-item-directive.js
 /bower_components/
 /node_modules/*
 .vscode
+build/
