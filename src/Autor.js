@@ -32,9 +32,6 @@ class AutorForm extends Component {
         super();
         this.state = {nome: '', email: '', senha: ''};
         this.sendForm = this.sendForm.bind(this);
-        this.setNome = this.setNome.bind(this);
-        this.setEmail = this.setEmail.bind(this);
-        this.setSenha = this.setSenha.bind(this);
         this.cleanFields = this.cleanFields.bind(this);
     }
 
@@ -68,20 +65,14 @@ class AutorForm extends Component {
         });
     }
 
-    setNome(evt) {
-        this.setState({nome: evt.target.value});
-    }
-
-    setEmail(evt) {
-        this.setState({email: evt.target.value});
-    }
-
-    setSenha(evt) {
-        this.setState({senha: evt.target.value});
+    setFieldValue(inputName, event) {
+        var fieldChanged = {};
+        fieldChanged[inputName] = event.target.value;
+        this.setState(fieldChanged)
     }
 
     cleanFields() {
-        this.setState({nome: '', email: '', senha: ''});
+        this.setState({ nome: '', email: '', senha: '' });
     }
       
     render() {
@@ -90,13 +81,13 @@ class AutorForm extends Component {
                 <form className="pure-form pure-form-aligned" method="POST" onSubmit={this.sendForm}>
                 
                     <InputCustom id={this.state.nome} label="Nome" name="nome" type="text" 
-                        value={this.state.nome} onChange={this.setNome} />
+                        value={this.state.nome} onChange={this.setFieldValue.bind(this, 'nome')} />
 
                     <InputCustom id={this.state.email} label="E-mail" name="email" type="email" 
-                        value={this.state.email} onChange={this.setEmail} />
+                        value={this.state.email} onChange={this.setFieldValue.bind(this, 'email')} />
 
                     <InputCustom id={this.state.senha} label="Senha" name="senha" type="password" 
-                        value={this.state.senha} onChange={this.setSenha} />
+                        value={this.state.senha} onChange={this.setFieldValue.bind(this, 'senha')} />
 
                     <div className="pure-control-group">                                  
                         <label></label> 

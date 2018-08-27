@@ -42,22 +42,13 @@ class LivroForm extends Component {
         super();
         this.state = { titulo: '', preco: 0.0, autorId: '', autores: [] };
         this.sendForm = this.sendForm.bind(this);
-        this.setTitulo = this.setTitulo.bind(this);
-        this.setPreco = this.setPreco.bind(this);
-        this.setAutorId = this.setAutorId.bind(this);
         this.cleanFields = this.cleanFields.bind(this);
     }
 
-    setTitulo(evt) {
-        this.setState({ titulo: evt.target.value });
-    }
-
-    setPreco(evt) {
-        this.setState({ preco: evt.target.value });
-    }
-
-    setAutorId(evt) {
-        this.setState({ autorId: evt.target.value });
+    setFieldValue(inputName, event) {
+        var fieldChanged = {};
+        fieldChanged[inputName] = event.target.value;
+        this.setState(fieldChanged)
     }
 
     cleanFields() {
@@ -114,15 +105,15 @@ class LivroForm extends Component {
                 <form className="pure-form pure-form-aligned" method="POST" onSubmit={this.sendForm}>
                 
                     <InputCustom id="titulo" label="Titulo" name="titulo" type="text" 
-                        value={this.state.titulo} onChange={this.setTitulo} />
+                        value={this.state.titulo} onChange={ this.setFieldValue.bind(this, 'titulo') } />
 
                     <InputCustom id="preco" label="Preço" name="preco" type="text" 
-                        value={this.state.preco} onChange={this.setPreco} />
+                        value={this.state.preco} onChange={ this.setFieldValue.bind(this, 'preco') } />
 
                     <div className="pure-control-group">
                         <label htmlFor="autor">Autor</label>
                         <select id="autor" label="Autor" name="autorId" 
-                            value={this.state.autorId} onChange={this.setAutorId}>
+                            value={this.state.autorId} onChange={ this.setFieldValue.bind(this, 'autorId') }>
                             <option>Selecione o autor</option> 
                             { autores }
                         </select>
